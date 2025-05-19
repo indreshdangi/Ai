@@ -552,5 +552,46 @@ document.getElementById('user-input').addEventListener('keypress', function (e) 
   }
 });
  </script>
+    <script>
+  function addMessage(sender, message, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = isUser ? 'message user-message' : 'message ai-message';
+    messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    document.getElementById('chat-messages').appendChild(messageDiv);
+  }
+
+  async function simulateAIResponse(userMessage) {
+    const apiKey = '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';
+    const typingIndicator = document.getElementById('typing-indicator');
+    typingIndicator.style.display = 'flex';
+
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://indreshdangi.github.io',
+          'X-Title': 'Indresh 2.0'
+        },
+        body: JSON.stringify({
+          model: 'nousresearch/deep-hermes-3-mistral-24b-preview',
+          messages: [
+            { role: 'system', content: 'You are Indresh 2.0, a desi, funny and sharp AI assistant.' },
+            { role: 'user', content: userMessage }
+          ]
+        })
+      });
+
+      const data = await response.json();
+      const aiReply = data?.choices?.[0]?.message?.content || "❌ Error: No response received.";
+      addMessage("Indresh 2.0", aiReply);
+    } catch (err) {
+      addMessage("Indresh 2.0", "❌ Server Error: " + err.message);
+    } finally {
+      typingIndicator.style.display = 'none';
+    }
+  }
+</script>
 </body>
 </html>
