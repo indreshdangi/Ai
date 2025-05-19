@@ -533,28 +533,23 @@
     addMessage('Indresh 2.0', "❌ Server error: " + error.message);
   }
 }o
-            // Send message when button is clicked
-            sendButton.addEventListener('click', function() {
-                const message = userInput.value.trim();
-                if (message) {
-                    addMessage('You', message, true);
-                    userInput.value = '';
-                    simulateAIResponse(message);
-                }
-            });
+           // ✅ Send button par click hone par message bhej do
+document.getElementById('send-button').addEventListener('click', function () {
+  const userInputElement = document.getElementById('user-input');
+  const userMessage = userInputElement.value.trim();
 
-            // Send message when Enter key is pressed
-            userInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    const message = userInput.value.trim();
-                    if (message) {
-                        addMessage('You', message, true);
-                        userInput.value = '';
-                        simulateAIResponse(message);
-                    }
-                }
-            });
-        });
-    </script>
+  if (userMessage !== '') {
+    addMessage('You', userMessage, true);
+    simulateAIResponse(userMessage);
+    userInputElement.value = '';
+  }
+});
+
+// ✅ Enter key se bhi bhejna
+document.getElementById('user-input').addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') {
+    document.getElementById('send-button').click();
+  }
+});
 </body>
 </html>
